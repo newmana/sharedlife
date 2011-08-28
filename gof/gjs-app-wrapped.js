@@ -3804,14 +3804,90 @@ exports.Map = function (dims) {
      * Set cell at mousePos to alive. Transforms passed mouse position
      * to map position.
      */
-    this.setAt = function(mousePos) {
+    this.convertMouseCoords = function(mousePos) {
         var x = parseInt(mousePos[1] / CELL_SIZE, 10);
         var y = parseInt(mousePos[0] / CELL_SIZE, 10);
-        if (x < 0 || y < 0) return;
-        if (y >= W || x >= H) return;
-        set(map, x, y, true);
+        return { x: x, y: y};
+    };
+
+    this.setAt = function(mousePos) {
+        var coords = this.convertMouseCoords(mousePos);
+        if (coords.x < 0 || coords.y < 0) return;
+        if (coords.y >= W || coords.x >= H) return;
+        set(map, coords.x, coords.y, true);
         return;
-    }
+    };
+
+    this.send = function(mousePos) {
+        var coords = this.convertMouseCoords(mousePos);
+        if (coords.x < 0 || coords.y < 0) return;
+        if (coords.y >= W || coords.x >= H) return;
+        var selected = parseInt($('weapon').value);
+        switch (selected) {
+            case 1:
+                this.sendLeftTriangle(coords);
+                break;
+            case 2:
+                this.sendRightTriangle(coords);
+                break;
+            case 3:
+                this.sendGlider(coords);
+                break;
+            case 4:
+                this.sendDot(coords);
+                break;
+            default:
+                return
+        }
+    };
+
+    this.sendLeftTriangle = function(coords) {
+        var glider = {
+            x: coords.x,
+            y: coords.y,
+            data: [
+                [true, true],
+                [true, false]
+            ]
+        };
+        this.sendJsonTo(glider);
+    };
+
+    this.sendRightTriangle = function(coords) {
+        var glider = {
+            x: coords.x,
+            y: coords.y,
+            data: [
+                [true, true],
+                [false, true]
+            ]
+        };
+        this.sendJsonTo(glider);
+    };
+
+    this.sendGlider = function(coords) {
+        var glider = {
+            x: coords.x,
+            y: coords.y,
+            data: [
+                [false, true, false],
+                [false, false, true],
+                [true, true, true]
+            ]
+        };
+        this.sendJsonTo(glider);
+    };
+
+    this.sendDot = function(coords) {
+        var point = {
+            x: coords.x,
+            y: coords.y,
+            data: [
+                [true]
+            ]
+        }
+        this.sendJsonTo(point);
+    };
 
     /**
      * Draw game of life map to screen.
@@ -3878,23 +3954,6 @@ exports.Map = function (dims) {
     this.update = function() {
         if (paused === true) return;
         this.state = getFromJson();
-        // copy
-//        var newMap = getMapClone();
-//        newMap = getFromJson();
-//        for (var i = 0; i < H; i++) {
-//            for (var j = 0; j < W; j++) {
-//                var neighbors = map[i][j].neighbors;
-//                var alive = map[i][j].alive;
-//                if (alive === true) {
-//                    if (neighbors != 2 && neighbors != 3) {
-//                        set(newMap, i, j, false);
-//                    }
-//                } else if (neighbors === 3) {
-//                    set(newMap, i, j, true);
-//                }
-//            }
-//        }
-//        map = newMap;
         return;
     };
 
@@ -3919,20 +3978,7 @@ exports.Map = function (dims) {
 
     ;
 
-    function getMapClone() {
-        return map.map(function(r) {
-            return r.map(function(i) {
-                return {
-                    alive: i.alive,
-                    neighbors: i.neighbors
-                };
-            });
-        });
-    }
-
-    ;
-
-    function getFromJson() {
+    this.getFromJson = function() {
         var result;
         new Ajax.Request('/data', {
             method : 'get',
@@ -3942,6 +3988,13 @@ exports.Map = function (dims) {
             }
         });
         return result;
+    };
+
+    this.sendJsonTo = function(newBits) {
+        new Ajax.Request('/data/add', {
+            asynchronous : true,
+            parameters : newBits
+        });
     }
 
 
@@ -4014,12 +4067,12 @@ function main() {
    function eventHandler(event) {
       if (event.type === gamejs.event.MOUSE_DOWN) {
          isMouseDown = true;
-         map.setAt(event.pos);
+          map.send(event.pos);
       } else if (event.type === gamejs.event.MOUSE_UP) {
          isMouseDown = false;
       } else if (event.type === gamejs.event.MOUSE_MOTION) {
          if (isMouseDown) {
-            map.setAt(event.pos);
+             map.send(event.pos);
          }
       }
    }

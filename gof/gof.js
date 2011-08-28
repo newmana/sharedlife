@@ -53,51 +53,86 @@ exports.Map = function (dims) {
     this.convertMouseCoords = function(mousePos) {
         var x = parseInt(mousePos[1] / CELL_SIZE, 10);
         var y = parseInt(mousePos[0] / CELL_SIZE, 10);
-        return { x: x, y: y} ;
-    }
+        return { x: x, y: y};
+    };
 
     this.setAt = function(mousePos) {
-        var coords = convertMouseCoords(mousePos);
+        var coords = this.convertMouseCoords(mousePos);
         if (coords.x < 0 || coords.y < 0) return;
         if (coords.y >= W || coords.x >= H) return;
         set(map, coords.x, coords.y, true);
         return;
     };
 
-    this.sendSpaceship = function(mousePos) {
-        var coords = convertMouseCoords(mousePos);
+    this.send = function(mousePos) {
+        var coords = this.convertMouseCoords(mousePos);
         if (coords.x < 0 || coords.y < 0) return;
         if (coords.y >= W || coords.x >= H) return;
-        var glider = {
-            x: x,
-            y: y,
-            data: [[false, true, false], [false, false, true], [true, true, true]]
-        };
-        sendJsonTo(glider);
-    };
-
-    this.sendGlider = function(mousePos) {
-        var coords = convertMouseCoords(mousePos);
-        if (coords.x < 0 || coords.y < 0) return;
-        if (coords.y >= W || coords.x >= H) return;
-        var glider = {
-            x: x,
-            y: y,
-            data: [[false, true, false], [false, false, true], [true, true, true]]
-        };
-        sendJsonTo(glider);
-    };
-
-    this.sendDot = function(mousePos) {
-        var coords = convertMouseCoords(mousePos);
-        if (coords.x < 0 || coords.y < 0) return;
-        if (coords.y >= W || coords.x >= H) return;
-        var point = {
-            x: x,
-            y: y,
-            data: [[true]]
+        var selected = parseInt($('weapon').value);
+        switch (selected) {
+            case 1:
+                this.sendLeftTriangle(coords);
+                break;
+            case 2:
+                this.sendRightTriangle(coords);
+                break;
+            case 3:
+                this.sendGlider(coords);
+                break;
+            case 4:
+                this.sendDot(coords);
+                break;
+            default:
+                return
         }
-        sendJsonTo(point);
+    };
+
+    this.sendLeftTriangle = function(coords) {
+        var glider = {
+            x: coords.x,
+            y: coords.y,
+            data: [
+                [true, true],
+                [true, false]
+            ]
+        };
+        this.sendJsonTo(glider);
+    };
+
+    this.sendRightTriangle = function(coords) {
+        var glider = {
+            x: coords.x,
+            y: coords.y,
+            data: [
+                [true, true],
+                [false, true]
+            ]
+        };
+        this.sendJsonTo(glider);
+    };
+
+    this.sendGlider = function(coords) {
+        var glider = {
+            x: coords.x,
+            y: coords.y,
+            data: [
+                [false, true, false],
+                [false, false, true],
+                [true, true, true]
+            ]
+        };
+        this.sendJsonTo(glider);
+    };
+
+    this.sendDot = function(coords) {
+        var point = {
+            x: coords.x,
+            y: coords.y,
+            data: [
+                [true]
+            ]
+        }
+        this.sendJsonTo(point);
     };
 
     /**
@@ -204,10 +239,9 @@ exports.Map = function (dims) {
     this.sendJsonTo = function(newBits) {
         new Ajax.Request('/data/add', {
             asynchronous : true,
-            setData : newBits
+            parameters : newBits
         });
-    }
-
+    };
 
     this.random = function() {
         var c = ((W * H) / 5);
