@@ -55,7 +55,6 @@ exports.Map = function (dims) {
    this.setAt = function(x, y, alive) {
       if (x<0 || y<0) return;
       if (y>=W || x>=H) return;
-      console.log("setat "+alive+" "+x+" "+y);
       set(map, x, y, alive);
       return;
    }
@@ -137,7 +136,6 @@ exports.Map = function (dims) {
             }
          }
       }
-      process.stdout.write('.');
       // update the internal state as well as the external.
       map = newMap;
       this.map = map;

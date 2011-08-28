@@ -4,6 +4,7 @@ var app     = express.createServer();
 var map     = require('./gof.js').Map([500, 150]);
 setInterval(function() {
 	map.update();
+  process.stdout.write('.');
 }, 500);
 
 app.configure(function () {
@@ -16,7 +17,7 @@ app.get('/', function(req, res){
   res.render('index.html');
 });
 app.get('/data', function(req, res){
-	console.log("request")
+  process.stdout.write('r');
   res.writeHead(200, {'Content-Type': 'application/json'});
   res.end(JSON.stringify(map));
 });
