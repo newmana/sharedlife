@@ -124,23 +124,6 @@ exports.Map = function (dims) {
     this.update = function() {
         if (paused === true) return;
         this.state = getFromJson();
-        // copy
-//        var newMap = getMapClone();
-//        newMap = getFromJson();
-//        for (var i = 0; i < H; i++) {
-//            for (var j = 0; j < W; j++) {
-//                var neighbors = map[i][j].neighbors;
-//                var alive = map[i][j].alive;
-//                if (alive === true) {
-//                    if (neighbors != 2 && neighbors != 3) {
-//                        set(newMap, i, j, false);
-//                    }
-//                } else if (neighbors === 3) {
-//                    set(newMap, i, j, true);
-//                }
-//            }
-//        }
-//        map = newMap;
         return;
     };
 
