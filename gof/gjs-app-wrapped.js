@@ -3819,7 +3819,7 @@ exports.Map = function (dims) {
         var x, y;
         var color = null;
         var m = null;
-        var state = getFromJson();
+        if (state === undefined) return;
         H = state.height;
         W = state.width;
         for (var i = 0; i < H; i++) {
@@ -3876,7 +3876,7 @@ exports.Map = function (dims) {
      */
     this.update = function() {
         if (paused === true) return;
-
+        state = getFromJson();
         // copy
 //        var newMap = getMapClone();
 //        newMap = getFromJson();
