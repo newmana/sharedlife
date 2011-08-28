@@ -3953,7 +3953,7 @@ exports.Map = function (dims) {
      */
     this.update = function() {
         if (paused === true) return;
-        this.state = getFromJson();
+        this.state = this.getFromJson();
         return;
     };
 
@@ -3995,8 +3995,7 @@ exports.Map = function (dims) {
             asynchronous : true,
             parameters : newBits
         });
-    }
-
+    };
 
     this.random = function() {
         var c = ((W * H) / 5);
