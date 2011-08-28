@@ -3845,10 +3845,10 @@ exports.Map = function (dims) {
         var glider = {
             x: coords.x,
             y: coords.y,
-            data: [
+            data: Object.toJSON([
                 [true, true],
                 [true, false]
-            ]
+            ])
         };
         this.sendJsonTo(glider);
     };
@@ -3857,10 +3857,10 @@ exports.Map = function (dims) {
         var glider = {
             x: coords.x,
             y: coords.y,
-            data: [
+            data: Object.toJSON([
                 [true, true],
                 [false, true]
-            ]
+            ])
         };
         this.sendJsonTo(glider);
     };
@@ -3869,11 +3869,11 @@ exports.Map = function (dims) {
         var glider = {
             x: coords.x,
             y: coords.y,
-            data: [
+            data: Object.toJSON([
                 [false, true, false],
                 [false, false, true],
                 [true, true, true]
-            ]
+            ])
         };
         this.sendJsonTo(glider);
     };
@@ -3882,9 +3882,9 @@ exports.Map = function (dims) {
         var point = {
             x: coords.x,
             y: coords.y,
-            data: [
+            data: Object.toJSON([
                 [true]
-            ]
+            ])
         }
         this.sendJsonTo(point);
     };
