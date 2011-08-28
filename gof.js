@@ -52,12 +52,11 @@ exports.Map = function (dims) {
     * Set cell at mousePos to alive. Transforms passed mouse position
     * to map position.
     */
-   this.setAt = function(mousePos) {
-      var x = parseInt(mousePos[1] / CELL_SIZE, 10);
-      var y = parseInt(mousePos[0] / CELL_SIZE, 10);
+   this.setAt = function(x, y, alive) {
       if (x<0 || y<0) return;
       if (y>=W || x>=H) return;
-      set(map, x, y, true);
+      console.log("setat "+alive+" "+x+" "+y);
+      set(map, x, y, alive);
       return;
    }
 
