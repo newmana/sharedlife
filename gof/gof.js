@@ -30,6 +30,7 @@ var DIRS_LENGTH = DIRS.length;
 exports.Map = function (dims) {
     var W = parseInt(dims[0] / CELL_SIZE, 10);
     var H = parseInt(dims[1] / CELL_SIZE, 10);
+    var state;
 
     var paused = true;
 
@@ -65,12 +66,12 @@ exports.Map = function (dims) {
         var x, y;
         var color = null;
         var m = null;
-        var state = getFromJson();
-        H = state.height;
-        W = state.width;
+        if (!this.state) return;
+        H = this.state.height;
+        W = this.state.width;
         for (var i = 0; i < H; i++) {
             for (var j = 0; j < W; j++) {
-                m = state.map[i][j];
+                m = this.state.map[i][j];
                 if (m.modified === true) {
                     color = [255, 100, 255];
                     if (m.alive === false) {
@@ -122,7 +123,7 @@ exports.Map = function (dims) {
      */
     this.update = function() {
         if (paused === true) return;
-
+        this.state = getFromJson();
         // copy
 //        var newMap = getMapClone();
 //        newMap = getFromJson();
