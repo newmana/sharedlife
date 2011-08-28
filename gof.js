@@ -122,7 +122,6 @@ exports.Map = function (dims) {
     */
    this.update = function() {
       if (paused === true) return;
-      this.width = this.width+1;
 
       // copy
       var newMap = getMapClone();
