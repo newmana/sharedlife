@@ -50,14 +50,55 @@ exports.Map = function (dims) {
      * Set cell at mousePos to alive. Transforms passed mouse position
      * to map position.
      */
-    this.setAt = function(mousePos) {
+    this.convertMouseCoords = function(mousePos) {
         var x = parseInt(mousePos[1] / CELL_SIZE, 10);
         var y = parseInt(mousePos[0] / CELL_SIZE, 10);
-        if (x < 0 || y < 0) return;
-        if (y >= W || x >= H) return;
-        set(map, x, y, true);
-        return;
+        return { x: x, y: y} ;
     }
+
+    this.setAt = function(mousePos) {
+        var coords = convertMouseCoords(mousePos);
+        if (coords.x < 0 || coords.y < 0) return;
+        if (coords.y >= W || coords.x >= H) return;
+        set(map, coords.x, coords.y, true);
+        return;
+    };
+
+    this.sendSpaceship = function(mousePos) {
+        var coords = convertMouseCoords(mousePos);
+        if (coords.x < 0 || coords.y < 0) return;
+        if (coords.y >= W || coords.x >= H) return;
+        var glider = {
+            x: x,
+            y: y,
+            data: [[false, true, false], [false, false, true], [true, true, true]]
+        };
+        sendJsonTo(glider);
+    };
+
+    this.sendGlider = function(mousePos) {
+        var coords = convertMouseCoords(mousePos);
+        if (coords.x < 0 || coords.y < 0) return;
+        if (coords.y >= W || coords.x >= H) return;
+        var glider = {
+            x: x,
+            y: y,
+            data: [[false, true, false], [false, false, true], [true, true, true]]
+        };
+        sendJsonTo(glider);
+    };
+
+    this.sendDot = function(mousePos) {
+        var coords = convertMouseCoords(mousePos);
+        if (coords.x < 0 || coords.y < 0) return;
+        if (coords.y >= W || coords.x >= H) return;
+        var point = {
+            x: x,
+            y: y,
+            data: [[true]]
+        }
+        sendJsonTo(point);
+    };
 
     /**
      * Draw game of life map to screen.
@@ -148,20 +189,7 @@ exports.Map = function (dims) {
 
     ;
 
-    function getMapClone() {
-        return map.map(function(r) {
-            return r.map(function(i) {
-                return {
-                    alive: i.alive,
-                    neighbors: i.neighbors
-                };
-            });
-        });
-    }
-
-    ;
-
-    function getFromJson() {
+    this.getFromJson = function() {
         var result;
         new Ajax.Request('/data', {
             method : 'get',
@@ -171,6 +199,13 @@ exports.Map = function (dims) {
             }
         });
         return result;
+    };
+
+    this.sendJsonTo = function(newBits) {
+        new Ajax.Request('/data/add', {
+            asynchronous : true,
+            setData : newBits
+        });
     }
 
 
