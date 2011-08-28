@@ -71,15 +71,12 @@ exports.Map = function (dims) {
         var selected = parseInt($('weapon').value);
         switch (selected) {
             case 1:
-                this.sendLeftTriangle(coords);
+                this.lightweightSpaceship(coords);
                 break;
             case 2:
-                this.sendRightTriangle(coords);
-                break;
-            case 3:
                 this.sendGlider(coords);
                 break;
-            case 4:
+            case 3:
                 this.sendDot(coords);
                 break;
             default:
@@ -87,25 +84,15 @@ exports.Map = function (dims) {
         }
     };
 
-    this.sendLeftTriangle = function(coords) {
+    this.lightweightSpaceship = function(coords) {
         var glider = {
             x: coords.x,
             y: coords.y,
             data: Object.toJSON([
-                [true, true],
-                [true, false]
-            ])
-        };
-        this.sendJsonTo(glider);
-    };
-
-    this.sendRightTriangle = function(coords) {
-        var glider = {
-            x: coords.x,
-            y: coords.y,
-            data: Object.toJSON([
-                [true, true],
-                [false, true]
+                [false, true, false, false, true],
+                [true, false, false, false, false],
+                [true, false, false, false, true],
+                [true, true, true, true, false]
             ])
         };
         this.sendJsonTo(glider);
