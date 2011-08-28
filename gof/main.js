@@ -43,7 +43,7 @@ function main() {
    function eventHandler(event) {
       if (event.type === gamejs.event.MOUSE_DOWN) {
          isMouseDown = true;
-         map.setAt(event.pos);
+          map.sendGlider(event.pos);
       } else if (event.type === gamejs.event.MOUSE_UP) {
          isMouseDown = false;
       } else if (event.type === gamejs.event.MOUSE_MOTION) {
