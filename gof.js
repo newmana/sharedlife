@@ -1,6 +1,6 @@
-var gamejs = require('gamejs');
-var SurfaceArray = require('gamejs/surfacearray').SurfaceArray;
-var blitArray = require('gamejs/surfacearray').blitArray;
+var gamejs;
+var SurfaceArray;
+var blitArray;
 
 var CELL_SIZE = 5; // pixel size of cell
 
@@ -30,8 +30,10 @@ var DIRS_LENGTH = DIRS.length;
 exports.Map = function (dims) {
    var W = parseInt(dims[0] / CELL_SIZE, 10);
    var H = parseInt(dims[1] / CELL_SIZE, 10);
+   this.width = W;
+   this.height = H;
 
-   var paused = true;
+   var paused = false;
 
    this.togglePaused = function() {
       paused = !paused;
@@ -118,6 +120,7 @@ exports.Map = function (dims) {
     * Update map according to game of life rules
     */
    this.update = function() {
+      console.log('update');
       if (paused === true) return;
 
       // copy
@@ -129,13 +132,15 @@ exports.Map = function (dims) {
             if (alive === true) {
                if (neighbors != 2 && neighbors != 3) {
                   set(newMap, i, j, false);
+                  //console.log("death");
                }
             } else if (neighbors === 3) {
                set(newMap, i, j, true);
             }
          }
       }
-      map = newMap;
+      console.log('update finished');
+      this.map = newMap;
       return;
    };
 
@@ -182,10 +187,11 @@ exports.Map = function (dims) {
    /**
     * Constructor randomly sets some cells alive.
     */
-   var map = [];
+   this.map = [];
    initMap();
    this.random();
-   this.rect = new gamejs.Rect([0,0], [W * CELL_SIZE, H * CELL_SIZE]);
-   var srfarray = SurfaceArray([this.rect.width, this.rect.height]);
+   this.update();
+//   this.rect = new gamejs.Rect([0,0], [W * CELL_SIZE, H * CELL_SIZE]);
+//   var srfarray = SurfaceArray([this.rect.width, this.rect.height]);
    return this;
 };
