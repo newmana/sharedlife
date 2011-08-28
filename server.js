@@ -1,8 +1,7 @@
 var express = require('express');
 var app     = express.createServer();
 
-var field   = require('./gof.js');
-var	map 	  = field.Map([100, 100]);
+var map     = require('./gof.js').Map([100, 100]);
 setInterval(function() {
 	map.update();
 }, 2000);

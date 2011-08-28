@@ -32,6 +32,7 @@ exports.Map = function (dims) {
    var H = parseInt(dims[1] / CELL_SIZE, 10);
    this.width = W;
    this.height = H;
+   this.map = [];
 
    var paused = false;
 
@@ -120,8 +121,8 @@ exports.Map = function (dims) {
     * Update map according to game of life rules
     */
    this.update = function() {
-      console.log('update');
       if (paused === true) return;
+      this.width = this.width+1;
 
       // copy
       var newMap = getMapClone();
@@ -132,15 +133,16 @@ exports.Map = function (dims) {
             if (alive === true) {
                if (neighbors != 2 && neighbors != 3) {
                   set(newMap, i, j, false);
-                  //console.log("death");
                }
             } else if (neighbors === 3) {
                set(newMap, i, j, true);
             }
          }
       }
-      console.log('update finished');
-      this.map = newMap;
+      process.stdout.write('.');
+      // update the internal state as well as the external.
+      map = newMap;
+      this.map = map;
       return;
    };
 
@@ -187,10 +189,8 @@ exports.Map = function (dims) {
    /**
     * Constructor randomly sets some cells alive.
     */
-   this.map = [];
    initMap();
    this.random();
-   this.update();
 //   this.rect = new gamejs.Rect([0,0], [W * CELL_SIZE, H * CELL_SIZE]);
 //   var srfarray = SurfaceArray([this.rect.width, this.rect.height]);
    return this;
