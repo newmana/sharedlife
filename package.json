@@ -4,6 +4,9 @@
        "scripts": {
          "start": "node server.js"
        },
-       "dependencies": { expresso }
+       "dependencies": { 
+        	"expresso": ">= 0.8.1"
+       }
+       "engine": "node 0.4.1"
 }
 
