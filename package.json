@@ -5,7 +5,7 @@
          "start": "node server.js"
        },
        "dependencies": { 
-        	"expresso": ">= 0.8.1"
+        	"expresso": "= 0.7.2"
        },
        "engine": "node 0.4.11"
 }
