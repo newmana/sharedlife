@@ -36,6 +36,6 @@ app.post('/data/add', function(req, res){
 	}
   res.end();
 });
-
-app.listen(8080);
-console.log('game of life server running at http://127.0.0.1:8080/');
+var port = process.env.NODE_ENV === 'production' ? 80 : 8080
+app.listen(port);
+console.log('game of life server running at http://127.0.0.1:'+port+'/');
