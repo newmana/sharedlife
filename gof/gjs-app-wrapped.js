@@ -3786,7 +3786,7 @@ exports.Map = function (dims) {
     var H = parseInt(dims[1] / CELL_SIZE, 10);
     var state;
 
-    var paused = true;
+    var paused = false;
 
     this.togglePaused = function() {
         paused = !paused;
@@ -4073,12 +4073,6 @@ function main() {
     });
     addClickHandler('gof-step', function() {
         map.forceUpdate();
-    });
-    addClickHandler('gof-random', function() {
-        map.random();
-    });
-    addClickHandler('gof-clear', function() {
-        map.clear();
     });
     /**
      * Every game tick...

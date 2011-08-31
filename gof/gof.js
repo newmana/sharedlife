@@ -32,7 +32,7 @@ exports.Map = function (dims) {
     var H = parseInt(dims[1] / CELL_SIZE, 10);
     var state;
 
-    var paused = true;
+    var paused = false;
 
     this.togglePaused = function() {
         paused = !paused;

@@ -60,6 +60,7 @@ function main() {
 
     addClickHandler('gof-playpause', function() {
         map.togglePaused();
+        alert('e');
     });
     addClickHandler('gof-step', function() {
         map.forceUpdate();

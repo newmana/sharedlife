@@ -5,7 +5,7 @@ var map     = require('./gof.js').Map([500, 150]);
 setInterval(function() {
 	map.update();
   process.stdout.write('.');
-}, 500);
+}, 1000);
 
 app.configure(function () {
 	app.use(express.bodyParser());
