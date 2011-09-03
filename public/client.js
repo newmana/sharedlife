@@ -1,4 +1,4 @@
-var socket = io.connect('http://localhost');
+var socket = io.connect();
 
 socket.on('state', function (data) {
 	var field = JSON.parse(data);
