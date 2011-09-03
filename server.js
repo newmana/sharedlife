@@ -1,15 +1,35 @@
 var express = require('express');
 var app     = express.createServer();
+var io      = require('socket.io').listen(app);
 
-var map     = require('./gof.js').Map([500, 150]);
+io.enable('browser client minification');  // send minified client
+io.enable('browser client etag');          // apply etag caching logic based on version number
+io.set('log level', 1);                    // reduce logging
+io.set('transports', [                     // enable all transports (optional if you want flashsocket)
+    'websocket'
+  , 'flashsocket'
+  , 'htmlfile'
+  , 'xhr-polling'
+  , 'jsonp-polling'
+]);
+
+var map     = require('./gof.js').Map([200, 150]);
 setInterval(function() {
 	map.update();
   process.stdout.write('.');
-}, 1000);
+  io.sockets.emit('state', JSON.stringify(map.getCellMap()));
+}, 500);
+
+io.sockets.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
 
 app.configure(function () {
 	app.use(express.bodyParser());
-  app.use(express.static(__dirname + '/gof'));
+  app.use(express.static(__dirname + '/public'));
 });
 app.set("view options", { layout: false }) 
 
@@ -19,7 +39,7 @@ app.get('/', function(req, res){
 app.get('/data', function(req, res){
   process.stdout.write('r');
   res.writeHead(200, {'Content-Type': 'application/json'});
-  res.end(JSON.stringify(map));
+  res.end(JSON.stringify(map.getCellMap()));
 });
 app.post('/data/add', function(req, res){
 	console.log("adding cells");

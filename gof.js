@@ -2,8 +2,6 @@ var gamejs;
 var SurfaceArray;
 var blitArray;
 
-var CELL_SIZE = 5; // pixel size of cell
-
 var DIRS = [
    [1,0],
    [0,1],
@@ -28,11 +26,12 @@ var DIRS_LENGTH = DIRS.length;
  */
 
 exports.Map = function (dims) {
-   var W = parseInt(dims[0] / CELL_SIZE, 10);
-   var H = parseInt(dims[1] / CELL_SIZE, 10);
+   var W = parseInt(dims[0], 10);
+   var H = parseInt(dims[1], 10);
    this.width = W;
    this.height = H;
    this.map = [];
+   this.cells = [];
 
    var paused = false;
 
@@ -58,35 +57,6 @@ exports.Map = function (dims) {
       set(map, x, y, alive);
       return;
    }
-
-   /**
-    * Draw game of life map to screen.
-    */
-   this.draw = function(display) {
-      var x, y;
-      var color = null;
-      var m = null;
-      for (var i=0; i<H; i++) {
-         for (var j=0; j<W; j++) {
-            m = map[i][j];
-            if (m.modified === true) {
-               color = [255, 100, 255];
-               if (m.alive === false) {
-                  color = [255, 255, 255];
-               }
-               y = i * CELL_SIZE;
-               x = j * CELL_SIZE;
-               srfarray.set(x, y, color);
-               srfarray.set(x-1, y-1, color);
-               srfarray.set(x+1, y+1, color);
-               srfarray.set(x-1, y+1, color);
-               srfarray.set(x+1, y-1, color);
-
-            }
-         }
-      }
-      blitArray(display, srfarray);
-   };
 
    /**
     * set position to alive and update the neighbors
@@ -141,6 +111,8 @@ exports.Map = function (dims) {
       this.map = map;
       return;
    };
+   
+   
 
    this.clear = function() {
       initMap();
@@ -171,6 +143,22 @@ exports.Map = function (dims) {
          });
       });
    }
+   
+		this.getCellMap = function() {
+			cells = [];
+			//console.log(H+" "+W);
+      for (var i=0; i<H; i++) {
+      	cells[i] = [];
+      	for (var j=0; j<W; j++) {
+	      	if (map[i][j].alive) {
+        		cells[i][j] = 1;
+        	} else {
+	        	cells[i][j] = 0;
+        	}
+        }
+  		}
+      return cells;
+		}
 
    this.random = function() {
       var c= ((W * H) / 5);
@@ -187,7 +175,5 @@ exports.Map = function (dims) {
     */
    initMap();
    this.random();
-//   this.rect = new gamejs.Rect([0,0], [W * CELL_SIZE, H * CELL_SIZE]);
-//   var srfarray = SurfaceArray([this.rect.width, this.rect.height]);
    return this;
 };

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>shared game of life</title>
+	
+	<link href="/style.css" media="all" rel="stylesheet" type="text/css" />
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+	<script src="/jcanvas.min.js"></script>
+	<script src="/client.js"></script>
+</head>
+<body>
+	<p>
+		 <span>Click in the field to add a </span>
+		 <select id="weapon">
+			   <option value="1" selected>Spaceship</option>
+			   <option value="2">Glider</option>
+			   <option value="3">Dot</option>
+		 </select>
+	</p>
+  <canvas width="1024" height="768" id="canvas"></canvas>
+</body>
+</html>
+
