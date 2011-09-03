@@ -13,19 +13,12 @@ io.set('transports', [                     // enable all transports (optional if
   , 'jsonp-polling'
 ]);
 
-var map     = require('./gof.js').Map([200, 150]);
+var map     = require('./gof.js').Map([1000, 1000]);
 setInterval(function() {
 	map.update();
   process.stdout.write('.');
-  io.sockets.emit('state', JSON.stringify(map.getCellMap()));
+  io.sockets.volatile.emit('state', JSON.stringify(map.getCellMap(200,150)));
 }, 500);
-
-io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
-});
 
 app.configure(function () {
 	app.use(express.bodyParser());

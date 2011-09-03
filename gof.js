@@ -31,26 +31,7 @@ exports.Map = function (dims) {
    this.width = W;
    this.height = H;
    this.map = [];
-   this.cells = [];
 
-   var paused = false;
-
-   this.togglePaused = function() {
-      paused = !paused;
-   };
-
-   this.forceUpdate = function() {
-      // FIXME force on update() but then we'd have update(ms, force)
-      paused = false;
-      this.update();
-      paused = true;
-      return;
-   };
-
-   /**
-    * Set cell at mousePos to alive. Transforms passed mouse position
-    * to map position.
-    */
    this.setAt = function(x, y, alive) {
       if (x<0 || y<0) return;
       if (y>=W || x>=H) return;
@@ -89,8 +70,6 @@ exports.Map = function (dims) {
     * Update map according to game of life rules
     */
    this.update = function() {
-      if (paused === true) return;
-
       // copy
       var newMap = getMapClone();
       for (var i=0; i<H; i++) {
@@ -112,8 +91,6 @@ exports.Map = function (dims) {
       return;
    };
    
-   
-
    this.clear = function() {
       initMap();
    };
@@ -144,24 +121,25 @@ exports.Map = function (dims) {
       });
    }
    
-		this.getCellMap = function() {
-			cells = [];
-			//console.log(H+" "+W);
-      for (var i=0; i<H; i++) {
-      	cells[i] = [];
-      	for (var j=0; j<W; j++) {
-	      	if (map[i][j].alive) {
-        		cells[i][j] = 1;
+		this.getCellMap = function(width, height) {
+			var packet = {};
+			packet.width = width;
+			packet.height = height;
+			packet.cells = "";
+      for (var y=0; y<height; y++) {
+      	for (var x=0; x<width; x++) {
+	      	if (map[y][x].alive) {
+		      	packet.cells += "1";
         	} else {
-	        	cells[i][j] = 0;
+		      	packet.cells += "0";
         	}
         }
   		}
-      return cells;
+      return packet;
 		}
 
    this.random = function() {
-      var c= ((W * H) / 5);
+      var c = ((W * H) / 5);
       for (var i=0;i<c;i++) {
          var x = parseInt(Math.random() * H, 10);
          var y = parseInt(Math.random() * W, 10);

@@ -2,6 +2,7 @@ var socket = io.connect();
 
 socket.on('state', function (data) {
 	var field = JSON.parse(data);
+	
 	drawField(field);
 });
 
@@ -12,8 +13,8 @@ this.drawField = function(data) {
 	var field = $("canvas");
 	field.clearCanvas();
 
-	var mapHeight = data.length;
-	var mapWidth = data[0].length;
+	var mapHeight = data.height;
+	var mapWidth = data.width;
 	
 	var scale = 1.0;
 
@@ -30,7 +31,8 @@ this.drawField = function(data) {
 	
 	for (var y = 0; y < mapHeight; y++) {
 		for (var x = 0; x < mapWidth; x++) {
-			if (data[y][x]) {
+			var cellIndex = (y*mapWidth)+x;
+			if (data.cells[cellIndex] === "1") {
 				field.drawRect({
 					fillStyle: "green", x: cellSpacing + x * outerCellWidth, y: cellSpacing + y * outerCellHeight, width: innerCellWidth, height: innerCellHeight, fromCenter: false
 				});
